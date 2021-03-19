@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    {% if error %}
+        <div class="row">
+            <h2 class="mx-auto mt-4">Sometihng went wrong.Make sure you uploaded intellify data</h2>
+
+
+        </div>
+    {% else %}
+        <div class=" {% if image %} wrapper {% else %} container {% endif %}">
+
+            {% if image %}
+                <div class="row">
+                    <h2 class="mx-auto mt-4">Anomaly Detection Visualization</h2>
+                    <div class="col-12">
+                        <img src="data:image/png;base64,{{ image }}" alt="Red dot"/>
+                    </div>
+
+                </div>
+
+                {% if json_data %}
+                    <div class="container">
+                        <h2 class="mx-auto mt-4">Anomaly Detection Json</h2>
+                        <table style="width:80%">
+                            <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>KWH value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for jd in json_data %}
+                                <tr>
+                                    <td>{{ jd.datetime }}</td>
+                                    <td>{{ jd.kWh }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            </table>
+                    </div>
+
+                {% endif %}s
+
+            {% else %}
+
+
+
+
+                <div class="row">
+                    <div class="col-12 ">
+
+                        <h3 class="my-4">You can only upload the csv file which you download from <a
+                                target="_blank"
+                                href="http://demo.intellify.lv/login">
+                            demo@intellify.lv </a></h3>
+
+
+                        <h4 class="mx-auto mt-4">We recommend to upload at least 1-month data for better anomalies</h4>
+
+
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-4">
+
+                        <form method="post" class="uniForm" enctype="multipart/form-data">
+                            {{ form|crispy }}
+                            {% csrf_token %}
+                            <input type="submit" class="btn btn-success" value="Analyze">
+                        </form>
+
+
+                    </div>
+
+                </div>
+                </div>
+            {% endif %}
+    {% endif %}
+
+
+{% endblock content %}
+
